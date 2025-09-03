@@ -1,7 +1,7 @@
 import os
 import logging
 import asyncio
-import aiosqlite
+import sqlite3
 import json
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
