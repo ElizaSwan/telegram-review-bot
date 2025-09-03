@@ -1,30 +1,32 @@
+python
 import os
 import logging
+import asyncio
+import sqlite3
+import json
 from dotenv import load_dotenv
 
-# Сначала загружаем .env
+# Загрузка .env файла
 load_dotenv()
 
-# Только потом получаем переменные
+# Получение переменных окружения
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 YANDEX_API_KEY = os.getenv('YANDEX_API_KEY')
 YANDEX_FOLDER_ID = os.getenv('YANDEX_FOLDER_ID')
 
-# Теперь можно делать проверки
+# Проверка переменных
 print("=" * 60)
 print("🔍 ЗАГРУЖЕННЫЕ ПЕРЕМЕННЫЕ ИЗ .env:")
-
-# Безопасная проверка переменных
-def safe_print(var_name, var_value):
-    if var_value:
-        return f"✅ {var_name}: {var_value}"
-    else:
-        return f"❌ {var_name}: NOT SET"
-
-print(safe_print("TELEGRAM_BOT_TOKEN", TELEGRAM_BOT_TOKEN))
-print(safe_print("YANDEX_API_KEY", YANDEX_API_KEY))
-print(safe_print("YANDEX_FOLDER_ID", YANDEX_FOLDER_ID))
+print(f"✅ TELEGRAM_BOT_TOKEN: {TELEGRAM_BOT_TOKEN}")
+print(f"✅ YANDEX_API_KEY: {YANDEX_API_KEY}")
+print(f"✅ YANDEX_FOLDER_ID: {YANDEX_FOLDER_ID}")
 print("=" * 60)
+
+# Теперь импорты из telegram (ПОСЛЕ переменных!)
+from telegram import Update, ReplyKeyboardRemove
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
+from yagpt_client import yagpt_client
+import keyboards as kb
 
 # Настройка логирования
 logging.basicConfig(
@@ -36,13 +38,11 @@ logger = logging.getLogger(__name__)
 # Состояния разговора
 GENDER, SERVICE, LIKES, COMMENT, RECOMMENDATION, FINAL_CONFIRMATION = range(6)
 
-# База данных (синхронная версия)
-import sqlite3
-
+# База данных
 class DatabaseManager:
     def __init__(self, db_path='reviews.db'):
         self.db_path = db_path
-
+    
     def init_database(self):
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -62,7 +62,7 @@ class DatabaseManager:
         ''')
         conn.commit()
         conn.close()
-
+    
     def save_review(self, user_id, user_name, gender, service, likes, recommendation, comment, generated_review):
         likes_json = json.dumps(likes, ensure_ascii=False)
         conn = sqlite3.connect(self.db_path)
