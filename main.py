@@ -1,5 +1,6 @@
 import os
 import logging
+from dotenv import load_dotenv
 import asyncio
 import sqlite3
 import json
@@ -7,13 +8,22 @@ from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
 from yagpt_client import yagpt_client
 import keyboards as kb
-
+load_dotenv()
+# Настройка логирования
 # Настройка логирования
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+# Детальная проверка
+print("=" * 60)
+print("🔍 ЗАГРУЖЕННЫЕ ПЕРЕМЕННЫЕ ИЗ .env:")
+print(f"TELEGRAM_BOT_TOKEN: {'✅' if TELEGRAM_BOT_TOKEN else '❌'} {TELEGRAM_BOT_TOKEN}")
+print(f"YANDEX_API_KEY: {'✅' if YANDEX_API_KEY else '❌'} {YANDEX_API_KEY}")
+print(f"YANDEX_FOLDER_ID: {'✅' if YANDEX_FOLDER_ID else '❌'} {YANDEX_FOLDER_ID}")
+print("=" * 60)
 
 # Конфигурация из переменных окружения
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
