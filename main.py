@@ -1,34 +1,37 @@
 import os
 import logging
 from dotenv import load_dotenv
-import asyncio
-import sqlite3
-import json
-from telegram import Update, ReplyKeyboardRemove
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
-from yagpt_client import yagpt_client
-import keyboards as kb
+
+# Сначала загружаем .env
 load_dotenv()
-# Настройка логирования
+
+# Только потом получаем переменные
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+YANDEX_API_KEY = os.getenv('YANDEX_API_KEY')
+YANDEX_FOLDER_ID = os.getenv('YANDEX_FOLDER_ID')
+
+# Теперь можно делать проверки
+print("=" * 60)
+print("🔍 ЗАГРУЖЕННЫЕ ПЕРЕМЕННЫЕ ИЗ .env:")
+
+# Безопасная проверка переменных
+def safe_print(var_name, var_value):
+    if var_value:
+        return f"✅ {var_name}: {var_value}"
+    else:
+        return f"❌ {var_name}: NOT SET"
+
+print(safe_print("TELEGRAM_BOT_TOKEN", TELEGRAM_BOT_TOKEN))
+print(safe_print("YANDEX_API_KEY", YANDEX_API_KEY))
+print(safe_print("YANDEX_FOLDER_ID", YANDEX_FOLDER_ID))
+print("=" * 60)
+
 # Настройка логирования
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-
-# Детальная проверка
-print("=" * 60)
-print("🔍 ЗАГРУЖЕННЫЕ ПЕРЕМЕННЫЕ ИЗ .env:")
-print(f"TELEGRAM_BOT_TOKEN: {'✅' if TELEGRAM_BOT_TOKEN else '❌'} {TELEGRAM_BOT_TOKEN}")
-print(f"YANDEX_API_KEY: {'✅' if YANDEX_API_KEY else '❌'} {YANDEX_API_KEY}")
-print(f"YANDEX_FOLDER_ID: {'✅' if YANDEX_FOLDER_ID else '❌'} {YANDEX_FOLDER_ID}")
-print("=" * 60)
-
-# Конфигурация из переменных окружения
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-YANDEX_API_KEY = os.getenv('YANDEX_API_KEY')
-YANDEX_FOLDER_ID = os.getenv('YANDEX_FOLDER_ID')
 
 # Состояния разговора
 GENDER, SERVICE, LIKES, COMMENT, RECOMMENDATION, FINAL_CONFIRMATION = range(6)
