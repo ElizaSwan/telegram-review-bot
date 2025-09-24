@@ -47,4 +47,4 @@ def get_platform_keyboard():
             InlineKeyboardButton("🔗 ВК", url="https://vk.com/ipoteka9367573")
         ]
     ])
-    ])
+
