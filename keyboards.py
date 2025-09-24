@@ -38,8 +38,13 @@ def get_skip_keyboard():
 
 def get_platform_keyboard():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏢 Cian", url="https://spb.cian.ru/agents/74067131/#new")],
-        [InlineKeyboardButton("🏠 Domclick", url="https://agencies.domclick.ru/agent/8752?region_id=44eeae98-63fd-4b9d-9ba2-c7806d6b8d6e?utm_content=offers.agent")]
-        [InlineKeyboardButton("📬 Telegram", url="t.me/demyanov_agency")]
-        [InlineKeyboardButton("🔗 ВК", url="https://vk.com/ipoteka9367573")]
+        [
+            InlineKeyboardButton("🏢 Cian", url="https://spb.cian.ru/agents/74067131/#new"),
+            InlineKeyboardButton("🏠 Domclick", url="https://agencies.domclick.ru/agent/8752?region_id=44eeae98-63fd-4b9d-9ba2-c7806d6b8d6e?utm_content=offers.agent")
+        ],
+        [
+            InlineKeyboardButton("📬 Telegram", url="t.me/demyanov_agency"),
+            InlineKeyboardButton("🔗 ВК", url="https://vk.com/ipoteka9367573")
+        ]
+    ])
     ])
